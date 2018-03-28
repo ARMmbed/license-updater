@@ -29,17 +29,13 @@ def update_licenses(target_dir, file_exts, new_license):
                         rewrite_file(of, txt)
                     else:
                         # Search for copyright date
-                        m = re.search('Copyright.*?((?P<range>(\d+)-(?P<end>\d+))|(?P<start>\d+))', txt)
+                        m = re.search('Copyright.*?[0-9,-]*?(?P<end>\d+)\s', txt)
                         if(m):
-                            dates = 'range' if m.group('range') else 'start'
-                            last_date = 'end' if m.group('end') else 'start'
-                            start_index = m.start(dates)
-                            end_index = m.end(dates)
-                            extra_text = m.group(dates)+','
                             # Check if the license is out of date
-                            if(int(m.group(last_date)) < 2018):
+                            if(int(m.group('end')) < 2018):
+                                end_index = m.end('end')
                                 # Format the file with updated license header
-                                txt = '%s%s%s%s'%(txt[:start_index],extra_text,'2018', txt[end_index:])
+                                txt = '%s%s%s'%(txt[:end_index],',2018', txt[end_index:])
                                 # Rewrite the file
                                 rewrite_file(of, txt)
 

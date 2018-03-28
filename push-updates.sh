@@ -6,10 +6,10 @@ update_license()
     fork_remote="https://github.com/$2/$1"
     echo "Cloning $fork_remote"
     git clone $fork_remote
-    python update-license.py -d $dir -f c_header_license.txt --ftype .c .h .cpp .js 
-    python update-license.py -d $dir -f python_header_license.txt --ftype .py
+    python update-license.py -d $dir -f licenses/c_header_license.txt --ftype .c .h .cpp .js 
+    python update-license.py -d $dir -f licenses/python_header_license.txt --ftype .py
     cd $dir
-    cat ../LICENSE > LICENSE
+    cat ../licenses/LICENSE > LICENSE
     git checkout -b 'license-test'
     git add -A 
     git commit -m "Add Apache licenses"

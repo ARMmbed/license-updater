@@ -3,8 +3,10 @@ import re
 import sys
 import argparse
 
-def rewrite_file(f, txt):
+def rewrite_file(f, txt, shebang_line = None):
     f.seek(0)
+    if shebang_line:
+        f.write(shebang_line)
     f.write(txt)
     f.truncate()
     f.close()
@@ -20,13 +22,15 @@ def update_licenses(target_dir, file_exts, new_license):
                 fname = os.path.join(root, f)
                 # Open the file
                 with open(fname, 'r+') as of:
+                    first_line = of.readline()
+                    shebang_line = first_line if first_line.startswith('#!') else None
                     txt = of.read()
                     # Check if there is no license
                     if('Apache' not in txt):
                         # Format file with license header
                         txt = '%s\n\n%s'%(new_license, txt) 
                         # Rewrite the file
-                        rewrite_file(of, txt)
+                        rewrite_file(of, txt, shebang_line)
                     else:
                         # Search for copyright date
                         m = re.search('Copyright.*?[0-9,-]*?(?P<end>\d+)\s', txt)
@@ -37,7 +41,7 @@ def update_licenses(target_dir, file_exts, new_license):
                                 # Format the file with updated license header
                                 txt = '%s%s%s'%(txt[:end_index],',2018', txt[end_index:])
                                 # Rewrite the file
-                                rewrite_file(of, txt)
+                                rewrite_file(of, txt, shebang_line)
 
     
 

@@ -3,6 +3,8 @@ import re
 import sys
 import argparse
 
+CURRENT_YEAR = 2018
+
 def rewrite_file(f, txt, shebang_line = None):
     f.seek(0)
     if shebang_line:
@@ -36,12 +38,15 @@ def update_licenses(target_dir, file_exts, new_license):
                         m = re.search('Copyright.*?[0-9,-]*?(?P<end>\d+)\s', txt)
                         if(m):
                             # Check if the license is out of date
-                            if(int(m.group('end')) < 2018):
+                            end_date = int(m.group('end'))
+                            if(end_date < CURRENT_YEAR):
                                 end_index = m.end('end')
+                                start_index = m.start('end') if end_date == CURRENT_YEAR - 1 else end_index
+                                replacement_txt = ',2018' if start_index == end_index else '2018'
                                 # Format the file with updated license header
-                                txt = '%s%s%s'%(txt[:end_index],',2018', txt[end_index:])
+                                txt = '%s%s%s'%(txt[:start_index],replacement_txt, txt[end_index:])
                                 # Rewrite the file
-                                rewrite_file(of, txt, shebang_line)
+                                rewrite_file(of, txt, first_line)
 
     
 

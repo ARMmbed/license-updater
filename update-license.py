@@ -30,7 +30,10 @@ def update_licenses(target_dir, file_exts, new_license):
                     # Check if there is no license
                     if('Apache' not in txt):
                         # Format file with license header
-                        txt = '%s\n\n%s'%(new_license, txt) 
+                        if not shebang_line:
+                            txt = '%s\n\n%s\n%s'%(new_license, first_line, txt) 
+                        else:
+                            txt = '%s\n\n%s'%(new_license, txt) 
                         # Rewrite the file
                         rewrite_file(of, txt, shebang_line)
                     else:

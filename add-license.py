@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import glob
+
 
 def add_license(fname, license):
     '''Add license text to file'''

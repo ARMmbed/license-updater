@@ -1,4 +1,21 @@
-# license-updater
+# Add License to source code files
+
+## Adding license
+
+First argument is a file containing the license text to add. The remaining arguments are the files to edit. Example use:
+
+```sh
+./add-license.py licenses/js_header_license.txt *.js
+```
+
+Another example:
+
+```sh
+./add-license.py licenses/c_header_license.txt ../some/other/dir/*.cpp ../some/other/dir/*.h
+```
+
+Shebang lines are preserved at the top of files.
+
 
 ## `update-license.py`
 
